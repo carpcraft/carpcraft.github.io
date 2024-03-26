@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionario sulla qualit&agrave; del sonno</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Questionario sulla qualit&agrave; del sonno</h1>
+        <p>Le domande seguenti servono a valutare come &egrave; stato il tuo sonno nell'ultimo mese. Per ciascuna domanda, scegli la risposta che descrive meglio la maggioranze dei giorni e delle notti dell'ultimo mese.</p>
+        <form id="sleequal-form">
+            <!-- Questions will go here -->
+            <!-- Question 1 -->
+            <div class="question">
+                <p>1) Nell'ultimo mese, come valuti complessivamente la qualità del tuo sonno?</p>
+                <select name="q1">
+                    <option value="0">Molto buona</option>
+                    <option value="1">Abbastanza buona</option>
+                    <option value="2">Abbastanza cattiva</option>
+                    <option value="3">Molto cattiva</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>2) Nell'ultimo mese, di solito, quanto tempo (in minuti) hai impiegato per addormentarti ogni notte?</p>
+                <select name="q2">
+                    <option value="0">Meno di 15 minuti</option>
+                    <option value="1">Tra 15 e 30 minuti</option>
+                    <option value="2">Tra 30 e 60 minuti</option>
+                    <option value="3">Pi&ugrave; di 60 minuti</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>3) Nell'ultimo mese, quante ore hai dormito effettivamente per notte?</p>
+                <select name="q3">
+                    <option value="0">Pi&ugrave; di 7 ore</option>
+                    <option value="1">Tra le 6 e le 7 ore</option>
+                    <option value="2">Tra le 5 e le 6 ore</option>
+                    <option value="3">Meno di 5 ore</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>4) Nell'ultimo mese, hai avuto problemi ad avere energie sufficienti per concludere le tue normali attivit&agrave;?</p>
+                <select name="q4">
+                    <option value="0">Per niente</option>
+                    <option value="1">Poco</option>
+                    <option value="2">Abbastanza</option>
+                    <option value="3">Molto</option>
+                </select>
+            </div><br>
+            <!-- Submit Button -->
+            <button type="submit">Invia</button>
+        </form><br>
+        <h2>Risultato</h2>
+        <div id="result"></div><br>
+        <div id="percentileBar" style="height: 20px; width: 100%; background-color: #e0e0e0;"></div>
+    </div>
+    <script src="script_sleequal.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>

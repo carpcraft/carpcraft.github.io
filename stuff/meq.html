@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionario rMEQ</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Questionario rMEQ</h1>
+        <p>Leggi attentamente ogni domanda prima di rispondere. Cerca di rispondere il più rapidamente e sinceramente possibile.</p>
+        <form id="rmeq-form">
+            <!-- Questions will go here -->
+            <!-- Question 1 -->
+            <div class="question">
+                <p>1) Considerando solo i tuoi ritmi personali, a che ora ti alzeresti la mattina se fossi completamente libero/a di organizzare la tua giornata?</p>
+                <select name="q1">
+                    <option value="5">prima delle 06:30</option>
+                    <option value="4">tra le 06:30 e le 07:45</option>
+                    <option value="3">tra le 07:45 e le 09:45</option>
+                    <option value="2">tra le 09:45 e le 10:45</option>
+                    <option value="1">dopo le 10:45</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>2) Quanto ti senti stanco/a durante la prima mezz’ora dopo il risveglio al mattino?</p>
+                <select name="q2">
+                    <option value="1">molto stanco/a</option>
+                    <option value="2">abbastanza stanco/a</option>
+                    <option value="3">abbastanza riposato/a</option>
+                    <option value="4">molto riposato/a</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>3) A che ora la sera ti senti stanco/a e di conseguenza hai bisogno di andare a dormire?</p>
+                <select name="q3">
+                    <option value="5">prima delle 21:00</option>
+                    <option value="4">tra le 21:00 e le 22:15</option>
+                    <option value="3">tra le 22:15 e le 00:30</option>
+                    <option value="2">tra le 00:30 e le 02:15</option>
+                    <option value="1">oltre le 02:15</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>4) A che ora del giorno pensi di raggiungere la massima forma?</p>
+                <!-- Response options for Question 1 -->
+                <select name="q4">
+                    <option value="5">tra le 04:00 e le 08:00</option>
+                    <option value="4">tra le 08:00 e le 11:00</option>
+                    <option value="3">tra le 11:00 e le 17:00</option>
+                    <option value="2">tra le 17:00 e le 20:00</option>
+                    <option value="1">tra le 20:00 e le 04:00</option>
+                </select>
+            </div>
+            <div class="question">
+                <p>5) Si sente parlare di due tipi di persone, uno che è più attivo al mattino e l’altro che è più attivo la sera. Quale di questi tipi ti consideri?</p>
+                <select name="q5">
+                    <option value="6">decisamente più attivo/a al mattino</option>
+                    <option value="4">un po' più attivo/a la mattina rispetto la sera</option>
+                    <option value="2">un po' più attivo/a la sera rispetto alla mattina</option>
+                    <option value="0">decisamente più attivo/a la sera</option>
+                </select>
+            </div><br>
+            <!-- Submit Button -->
+            <button type="submit">Invia</button>
+        </form><br>
+        <h2>Risultato</h2>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>
