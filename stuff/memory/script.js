@@ -30,7 +30,7 @@ function checkAnswers() {
     });
 
     const resultsDiv = document.getElementById("results");
-    resultsDiv.innerHTML = `<p>Hai ricordato <strong>${correctAnswers}</strong> parole su un totale di ${words.length}.</p>`;
+    resultsDiv.innerHTML = `<p>Hai ricordato <strong>${correctAnswers}</strong> parole su un totale di ${words.length}.<br>Vai alla <a href="memory_recall.html" title="prova differita">prova di richiamo</a>!</p>`;
     resultsDiv.style.display = "block";
     document.getElementById("recall-instructions").style.display = "none";
 }
