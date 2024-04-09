@@ -1,5 +1,5 @@
-const words = ["mela", "banana", "ciliegia", "appuntamento", "ulivo", "figura", "grappolo", "alveare"];
-const displayTime = 5000; // 5 seconds to memorize
+const words = ["mela", "banana", "tamburo", "giardino", "baffi", "finestra", "fiume", "alveare"];
+const displayTime = 8000; // 8 seconds to memorize
 
 
 function checkAnswers() {
