@@ -1,5 +1,5 @@
-const words = ["mela", "banana", "ciliegia", "appuntamento", "ulivo", "figura", "grappolo", "alveare"];
-const displayTime = 5000; // 5 seconds to memorize
+const words = ["mela", "banana", "tamburo", "giardino", "baffi", "finestra", "fiume", "alveare"];
+const displayTime = 8000; // 8 seconds to memorize
 
 document.getElementById("startButton").onclick = function() {
     startTest();
@@ -30,7 +30,7 @@ function checkAnswers() {
     });
 
     const resultsDiv = document.getElementById("results");
-    resultsDiv.innerHTML = `<p>Hai ricordato <strong>${correctAnswers}</strong> parole su un totale di ${words.length}.<br>Vai alla <a href="memory_recall.html" title="prova differita">prova di richiamo</a>!</p>`;
+    resultsDiv.innerHTML = `<p>Hai ricordato <strong>${correctAnswers}</strong> parole su un totale di ${words.length}.<br><br>Vai alla <a href="memory_recall.html" title="prova differita">prova di richiamo</a>!</p>`;
     resultsDiv.style.display = "block";
     document.getElementById("recall-instructions").style.display = "none";
 }
