@@ -90,7 +90,7 @@ function randITI() { // 2000–8000 ms
 
 function startPVT() {
   // 3-minute cap or fixed N trials (e.g., 30)
-  const maxTrials = 30;
+  const maxTrials = 5;
   trialIndex = 0;
   pvtInfo.textContent = `Trial ${trialIndex+1} di ${maxTrials}`;
   scheduleStimulus();
