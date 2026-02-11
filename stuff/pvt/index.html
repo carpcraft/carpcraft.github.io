@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vigilance Experiment</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; max-width: 600px; }
+    body { font-family: system-ui, sans-serif; margin: 0 auto; padding: 16px; max-width: 600px; }
     .center { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-    button { font-size: 18px; padding: 12px 18px; }
-    #stimulus { font-size: 48px; margin: 40px 0; }
+    button { font-size: 18px; padding: 12px 18px; width: 100%; max-width: 300px}
+    #stimulus { font-size: 64px; margin: 40px 0; }
     .hidden { display: none; }
     input[type="range"] { width: 90%; }
   </style>
@@ -108,6 +108,8 @@ function scheduleStimulus() {
 }
 
 tapBtn.onclick = () => {
+  tapBtn.disabled = true;
+  setTimeout(() => tapBtn.disabled = false, 300);
   const now = performance.now();
   if (!ready) {
     // False start
@@ -147,6 +149,9 @@ async function finishTask() {
   pvtDiv.classList.add('hidden');
   doneDiv.classList.remove('hidden');
 
+  // Loading message
+  doneDiv.innerHTML = "<h3>Fatto!</h3> <p>Invio dei dati in corso…</p>";
+
   // Compute summary row as well
   const rts = trials.filter(t => t.rt_ms !== null).map(t => t.rt_ms);
   const lapses = trials.filter(t => t.lapse).length;
@@ -171,8 +176,12 @@ async function finishTask() {
     });
     const txt = await resp.text();
     console.log('Submitted:', txt);
+    // Success message
+    doneDiv.innerHTML = "<h3>Fatto!</h3> <p>I tuoi dati sono stati registrati correttamente.</p>";
   } catch (e) {
     console.error('Submit failed', e);
+    // Error message
+    doneDiv.innerHTML = `<h3>Errore</h3> <p><strong>Si è verificato un problema nell'invio dei dati.</strong></p><p style="font-size: 14px; color: #555;">Dettagli tecnici: ${e}</p>`;
   }
 }
 </script>
