@@ -136,7 +136,7 @@ tapBtn.onclick = () => {
   });
 
   trialIndex++;
-  if (trialIndex >= 30) {
+  if (trialIndex >= 5) {
     finishTask();
   } else {
     pvtInfo.textContent = `Trial ${trialIndex+1} of 30`;
@@ -171,6 +171,7 @@ async function finishTask() {
   try {
     const resp = await fetch(WEBHOOK_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)
     });
