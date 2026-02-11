@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vigilance Experiment</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; max-width: 600px; }
+    .center { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    button { font-size: 18px; padding: 12px 18px; }
+    #stimulus { font-size: 48px; margin: 40px 0; }
+    .hidden { display: none; }
+    input[type="range"] { width: 90%; }
+  </style>
+</head>
+<body>
+  <div class="center">
+    <h2>Vigilance Experiment</h2>
+    <p>Esperimento anonimo.<br>Per favore, attiva la modalità "non disturbare" e tieni il telefono fermo davati a te.</p>
+
+    <div id="consent">
+      <p>Premendo su "Inizia" acconsenti a che le tue risposte anonime siano utilizzate per la discussione in classe.</p>
+      <button id="startBtn">Inizia</button>
+    </div>
+
+    <div id="vas" class="hidden">
+      <h3>Livello di sonnolenza (VAS)</h3>
+      <p>Quanto ti senti sonnolento/a in questo momento?</p>
+      <input id="vasSlider" type="range" min="0" max="100" value="50">
+      <div>Value: <span id="vasValue">50</span>/100</div>
+      <button id="vasNext">Continua con il test di vigilanza</button>
+    </div>
+
+    <div id="pvt" class="hidden">
+      <h3>Vigilance test</h3>
+      <p>Premi sullo schermo non appena appare lo stimolo bersaglio.</p>
+      <div id="stimulus">+</div>
+      <button id="tapBtn">Premi</button>
+      <div id="pvtInfo"></div>
+    </div>
+
+    <div id="done" class="hidden">
+      <h3>Fatto!</h3>
+      <p>Grazie, i tuoi dati sono stati registrati.</p>
+    </div>
+  </div>
+
+<script>
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyJalA5oyDuJw_LTXBTel6CNdW0hm5m1f9HLGA-g98McAxH9sAfM0gwx4lDkTYkDxzr2Q/exec'; // paste your URL
+const participant_id = 'S' + Math.random().toString(36).slice(2, 8);
+const device = navigator.userAgent;
+
+let sleepiness_vas = null;
+let trials = [];
+let ready = false;
+let stimulusOn = null;
+let responseOn = null;
+let trialIndex = 0;
+let itiTimer = null;
+
+const startBtn = document.getElementById('startBtn');
+const vasDiv = document.getElementById('vas');
+const consentDiv = document.getElementById('consent');
+const vasSlider = document.getElementById('vasSlider');
+const vasValue = document.getElementById('vasValue');
+const vasNext = document.getElementById('vasNext');
+const pvtDiv = document.getElementById('pvt');
+const stimulus = document.getElementById('stimulus');
+const tapBtn = document.getElementById('tapBtn');
+const pvtInfo = document.getElementById('pvtInfo');
+const doneDiv = document.getElementById('done');
+
+vasSlider.addEventListener('input', () => vasValue.textContent = vasSlider.value);
+
+startBtn.onclick = () => {
+  consentDiv.classList.add('hidden');
+  vasDiv.classList.remove('hidden');
+};
+
+vasNext.onclick = () => {
+  sleepiness_vas = parseInt(vasSlider.value);
+  vasDiv.classList.add('hidden');
+  pvtDiv.classList.remove('hidden');
+  startPVT();
+};
+
+function randITI() { // 2000–8000 ms
+  return 2000 + Math.floor(Math.random() * 6000);
+}
+
+function startPVT() {
+  // 3-minute cap or fixed N trials (e.g., 30)
+  const maxTrials = 30;
+  trialIndex = 0;
+  pvtInfo.textContent = `Trial ${trialIndex+1} di ${maxTrials}`;
+  scheduleStimulus();
+}
+
+function scheduleStimulus() {
+  ready = false;
+  stimulus.textContent = '+';
+  clearTimeout(itiTimer);
+  itiTimer = setTimeout(() => {
+    stimulus.textContent = '●';
+    stimulusOn = performance.now();
+    ready = true;
+  }, randITI());
+}
+
+tapBtn.onclick = () => {
+  const now = performance.now();
+  if (!ready) {
+    // False start
+    trials.push({
+      participant_id, device, task: 'PVT', trial_index: trialIndex,
+      sleepiness_vas,
+      rt_ms: null, lapse: null, false_start: true,
+      stimulus_on_ms: stimulusOn ?? null, response_ms: now,
+      block_id: 'main', notes: ''
+    });
+    stimulus.textContent = '+';
+    scheduleStimulus();
+    return;
+  }
+  responseOn = now;
+  const rt = Math.round(responseOn - stimulusOn);
+  const lapse = rt > 500; // standard lapse threshold
+  trials.push({
+    participant_id, device, task: 'PVT', trial_index: trialIndex,
+    sleepiness_vas,
+    rt_ms: rt, lapse, false_start: false,
+    stimulus_on_ms: stimulusOn, response_ms: responseOn,
+    block_id: 'main', notes: ''
+  });
+
+  trialIndex++;
+  if (trialIndex >= 30) {
+    finishTask();
+  } else {
+    pvtInfo.textContent = `Trial ${trialIndex+1} of 30`;
+    stimulus.textContent = '+';
+    scheduleStimulus();
+  }
+};
+
+async function finishTask() {
+  pvtDiv.classList.add('hidden');
+  doneDiv.classList.remove('hidden');
+
+  // Compute summary row as well
+  const rts = trials.filter(t => t.rt_ms !== null).map(t => t.rt_ms);
+  const lapses = trials.filter(t => t.lapse).length;
+  const medianRT = rts.length ? rts.sort((a,b)=>a-b)[Math.floor(rts.length/2)] : null;
+  const meanRT = rts.length ? Math.round(rts.reduce((a,b)=>a+b,0)/rts.length) : null;
+
+  const summary = {
+    participant_id, device, task: 'SUMMARY', trial_index: '',
+    sleepiness_vas,
+    rt_ms: meanRT, lapse: lapses, false_start: trials.filter(t=>t.false_start).length,
+    stimulus_on_ms: '', response_ms: '',
+    block_id: 'main', notes: `median=${medianRT}`
+  };
+
+  const payload = [summary, ...trials];
+
+  try {
+    const resp = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const txt = await resp.text();
+    console.log('Submitted:', txt);
+  } catch (e) {
+    console.error('Submit failed', e);
+  }
+}
+</script>
+</body>
+</html>
