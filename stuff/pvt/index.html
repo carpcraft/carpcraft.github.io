@@ -91,7 +91,7 @@ function randITI() { // 2000–8000 ms
 
 function startPVT() {
   // 3-minute cap or fixed N trials (e.g., 30)
-  const maxTrials = 5;
+  const maxTrials = 15;
   trialIndex = 0;
   pvtInfo.textContent = `Trial ${trialIndex+1} di ${maxTrials}`;
   scheduleStimulus();
@@ -137,10 +137,10 @@ tapBtn.onclick = () => {
   });
 
   trialIndex++;
-  if (trialIndex >= 5) {
+  if (trialIndex >= 15) {
     finishTask();
   } else {
-    pvtInfo.textContent = `Trial ${trialIndex+1} of 5`;
+    pvtInfo.textContent = `Trial ${trialIndex+1} of 15`;
     stimulus.textContent = '+';
     scheduleStimulus();
   }
